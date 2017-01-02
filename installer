@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# git-snap-commit make-less installer script based heavily on
+# the git-flow installer script
+# Author: Mohammed Nafees, hello <at> mnafees <dot> me
+
+if [ -z "$INSTALL_PREFIX" ] ; then
+	INSTALL_PREFIX="/usr/local/bin"
+fi
+
+if [ -z "$REPO_NAME" ] ; then
+	REPO_NAME="git-snap-commit"
+fi
+
+if [ -z "$REPO_HOME" ] ; then
+	REPO_HOME="https://github.com/mnafees/git-snap-commit.git"
+fi
+
+EXEC_FILES="git-snap-commit"
+
+echo "### git-snap-commit no-make installer ###"
+
