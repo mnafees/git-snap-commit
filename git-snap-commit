@@ -1,0 +1,49 @@
+#!/bin/sh
+
+# git-snap-commit
+# Copyright 2017 Mohammed Nafees, hello <at> mnafees <dot> me
+
+GITSNAPCOMMIT_DIR=$(dirname "$0")
+
+usage() {
+	echo "usage: git snap-commit can be used exactly the same way as git commit"
+	echo
+	echo "Example: git snap-commit -m \"First commit. Hooray!\""
+}
+
+main() {
+	if [ $# -lt 1 ]; then
+		usage
+		exit 1
+	fi
+
+	if [ ! -e "$PWD/index.html" ]; then
+		echo "Error: No index.html file found"
+		exit 1
+	fi	
+
+	# run git commit command
+	. "git commit $@"
+
+	if [ $? -eq 0 ]; then
+		INDEX_FILE="$PWD/index.html"
+    	COMMIT_MSG=${$(git log -1 --oneline)// /-}
+    	PROJECT_NAME=$(basename `git rev-parse --show-toplevel`)
+
+    	if [ ! -e "~/git-snap-commit/$PROJECT_NAME" ]; then
+    		. "mkdir -p ~/git-snap-commit/$PROJECT_NAME"
+    	fi
+
+    	. "cd ~/git-snap-commit/$PROJECT_NAME"
+
+    	. "phantomjs $GITSNAPCOMMIT_DIR/snap.js $INDEX_FILE $COMMIT_MSG"
+
+    	echo "Snap for commit saved in ~/git-snap-commit/$PROJECT_NAME"
+
+    	exit 0
+    else
+    	exit 1		
+	fi
+}
+
+main "$@"
