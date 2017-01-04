@@ -23,20 +23,21 @@ main() {
 	fi	
 
 	# run git commit command
-	. "git commit $@"
+	git commit "$@"
 
 	if [ $? -eq 0 ]; then
 		INDEX_FILE="$PWD/index.html"
-    	COMMIT_MSG=${$(git log -1 --oneline)// /-}
+		COMMIT_MSG=$(git log -1 --oneline)
+    	SNAP_SUFFIX=${COMMIT_MSG// /-}
     	PROJECT_NAME=$(basename `git rev-parse --show-toplevel`)
 
     	if [ ! -e "~/git-snap-commit/$PROJECT_NAME" ]; then
-    		. "mkdir -p ~/git-snap-commit/$PROJECT_NAME"
+    		mkdir -p ~/git-snap-commit/"$PROJECT_NAME"
     	fi
 
-    	. "cd ~/git-snap-commit/$PROJECT_NAME"
+    	cd ~/git-snap-commit/"$PROJECT_NAME"
 
-    	. "phantomjs $GITSNAPCOMMIT_DIR/snap.js $INDEX_FILE $COMMIT_MSG"
+    	phantomjs "$GITSNAPCOMMIT_DIR/snap.js" "$INDEX_FILE" "$SNAP_SUFFIX"
 
     	echo "Snap for commit saved in ~/git-snap-commit/$PROJECT_NAME"
 
