@@ -44,10 +44,11 @@ case "$1" in
 		exit
 		;;
 	install)
-		if ! pjs="$(type -p "$phantomjs")" || [ -z "$pjs" ]; then
+		if ! pjs="$(type -p "phantomjs")" || [ -z "$pjs" ]; then
+			echo 
 			echo "git-snap-commit depends on phantomjs, please install phantomjs"
 			echo "and make sure it is in your PATH to continue installation"
-			exit
+			exit 1
 		fi	
 		echo "Installing git-snap-commit to $INSTALL_PREFIX"
 		if [ -d "$REPO_NAME" -a -d "$REPO_NAME/.git" ] ; then
